@@ -10,11 +10,12 @@ import org.apache.activemq.artemis.api.core.client.ServerLocator;
 public class Consumer {
 
 	public static void main (String[] args) {
+
 		try {
-			ServerLocator locator = ActiveMQClient.createServerLocator("tcp://localhost:61616");
-	
+			ServerLocator locator = ActiveMQClient.createServerLocator("tcp://localhost:61617?sslEnabled=true&trustStorePath=client-side-truststore.jks&trustStorePassword=changeme&keyStorePath=client-side-keystore.jks&keyStorePassword=changeme");
 			ClientSessionFactory factory =  locator.createSessionFactory();
-			ClientSession session = factory.createSession();
+
+			ClientSession session = factory.createSession("consumerUser", "sekret", false, true, true, false, 0);
 			ClientConsumer consumer = session.createConsumer("core_messages");
 	
 			session.start();

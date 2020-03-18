@@ -22,10 +22,10 @@ public class Producer
 	public static void main(String[] args) {
 		
 		try {
-			ServerLocator locator = ActiveMQClient.createServerLocator("tcp://localhost:61616");
+			ServerLocator locator = ActiveMQClient.createServerLocator("tcp://localhost:61617?sslEnabled=true&trustStorePath=client-side-truststore.jks&trustStorePassword=changeme&keyStorePath=client-side-keystore.jks&keyStorePassword=changeme");
 
 			ClientSessionFactory factory =  locator.createSessionFactory();
-			ClientSession session = factory.createSession();
+			ClientSession session = factory.createSession("producerUsers", "sekret", false, true, true, false, 0);
 
 			try {
 				session.createQueue("interop_test", RoutingType.MULTICAST, "core_messages", true);

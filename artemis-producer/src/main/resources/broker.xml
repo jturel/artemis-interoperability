@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding="UTF-8"?>
+
+<configuration xmlns="urn:activemq"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
+
+    <core xmlns="urn:activemq:core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="urn:activemq:core ">
+
+        <acceptors>
+            <!-- <acceptor name="netty">tcp://localhost:61616</acceptor> -->
+            <acceptor name="netty-ssl-acceptor">tcp://localhost:61617?sslEnabled=true;needClientAuth=true;keyStorePath=server-side-keystore.jks;keyStorePassword=changeme;trustStorePath=server-side-truststore.jks;trustStorePassword=changeme</acceptor>          
+        </acceptors>
+
+        <security-enabled>true</security-enabled>
+        <security-settings>
+			<security-setting match="interop_test.#">
+			   <permission type="consume" roles="testconsumer"/>
+			   <permission type="createDurableQueue" roles="testproducer"/>
+			   <permission type="send" roles="testproducer"/>
+			</security-setting>
+		</security-settings>
+
+        <!-- Silence warnings on server startup -->
+        <cluster-user></cluster-user>
+        <cluster-password></cluster-password>
+
+        <persistence-enabled>true</persistence-enabled>
+        <journal-type>NIO</journal-type>
+        <journal-pool-files>1</journal-pool-files>
+        <create-bindings-dir>true</create-bindings-dir>
+        <create-journal-dir>true</create-journal-dir>
+        <bindings-directory>/tmp/activemq-artemis/bindings</bindings-directory>
+        <journal-directory>/tmp/activemq-artemis/journal</journal-directory>
+        <large-messages-directory>/tmp/activemq-artemis/largemsgs</large-messages-directory>
+        <paging-directory>/tmp/activemq-artemis/paging</paging-directory>
+
+        <!-- Use default thread pool max sizes as defined by Artemis. -->
+        <!-- Uncomment to customize.                                  -->
+        <!-- <thread-pool-max-size>30</thread-pool-max-size> -->
+        <!-- <scheduled-thread-pool-max-size>5</scheduled-thread-pool-max-size> -->
+
+        <addresses>
+            <address name="interop_test">
+                <multicast>
+                    <queue name="core_messages" />
+                </multicast>
+            </address>
+        </addresses>
+
+    </core>
+</configuration>
